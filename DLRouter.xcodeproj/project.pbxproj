@@ -15,6 +15,9 @@
 		85E585141D79517200802BF7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85E585121D79517200802BF7 /* LaunchScreen.storyboard */; };
 		85E5851F1D79517200802BF7 /* DLRouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E5851E1D79517200802BF7 /* DLRouterTests.m */; };
 		85E5852A1D79517200802BF7 /* DLRouterUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E585291D79517200802BF7 /* DLRouterUITests.m */; };
+		85E5853A1D7951A900802BF7 /* DLRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E585391D7951A900802BF7 /* DLRouter.m */; };
+		85E5853C1D79553500802BF7 /* rules.plist in Resources */ = {isa = PBXBuildFile; fileRef = 85E5853B1D79553500802BF7 /* rules.plist */; };
+		85E5853E1D79824600802BF7 /* RouterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E5853D1D79824600802BF7 /* RouterTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +54,10 @@
 		85E585251D79517200802BF7 /* DLRouterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DLRouterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		85E585291D79517200802BF7 /* DLRouterUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DLRouterUITests.m; sourceTree = "<group>"; };
 		85E5852B1D79517200802BF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85E585381D7951A900802BF7 /* DLRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLRouter.h; sourceTree = "<group>"; };
+		85E585391D7951A900802BF7 /* DLRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLRouter.m; sourceTree = "<group>"; };
+		85E5853B1D79553500802BF7 /* rules.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = rules.plist; sourceTree = "<group>"; };
+		85E5853D1D79824600802BF7 /* RouterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouterTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +108,7 @@
 		85E585031D79517200802BF7 /* DLRouter */ = {
 			isa = PBXGroup;
 			children = (
+				85E585371D79518800802BF7 /* DLRouter */,
 				85E585071D79517200802BF7 /* AppDelegate.h */,
 				85E585081D79517200802BF7 /* AppDelegate.m */,
 				85E5850A1D79517200802BF7 /* ViewController.h */,
@@ -127,6 +135,7 @@
 			children = (
 				85E5851E1D79517200802BF7 /* DLRouterTests.m */,
 				85E585201D79517200802BF7 /* Info.plist */,
+				85E5853D1D79824600802BF7 /* RouterTest.m */,
 			);
 			path = DLRouterTests;
 			sourceTree = "<group>";
@@ -138,6 +147,16 @@
 				85E5852B1D79517200802BF7 /* Info.plist */,
 			);
 			path = DLRouterUITests;
+			sourceTree = "<group>";
+		};
+		85E585371D79518800802BF7 /* DLRouter */ = {
+			isa = PBXGroup;
+			children = (
+				85E585381D7951A900802BF7 /* DLRouter.h */,
+				85E585391D7951A900802BF7 /* DLRouter.m */,
+				85E5853B1D79553500802BF7 /* rules.plist */,
+			);
+			path = DLRouter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -245,6 +264,7 @@
 			files = (
 				85E585141D79517200802BF7 /* LaunchScreen.storyboard in Resources */,
 				85E585111D79517200802BF7 /* Assets.xcassets in Resources */,
+				85E5853C1D79553500802BF7 /* rules.plist in Resources */,
 				85E5850F1D79517200802BF7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,6 +292,7 @@
 			files = (
 				85E5850C1D79517200802BF7 /* ViewController.m in Sources */,
 				85E585091D79517200802BF7 /* AppDelegate.m in Sources */,
+				85E5853A1D7951A900802BF7 /* DLRouter.m in Sources */,
 				85E585061D79517200802BF7 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +301,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85E5853E1D79824600802BF7 /* RouterTest.m in Sources */,
 				85E5851F1D79517200802BF7 /* DLRouterTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -496,6 +518,7 @@
 				85E585301D79517200802BF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		85E585311D79517200802BF7 /* Build configuration list for PBXNativeTarget "DLRouterTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +527,7 @@
 				85E585331D79517200802BF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		85E585341D79517200802BF7 /* Build configuration list for PBXNativeTarget "DLRouterUITests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +536,7 @@
 				85E585361D79517200802BF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
