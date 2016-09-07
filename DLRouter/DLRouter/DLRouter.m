@@ -60,6 +60,7 @@
     __block NSUInteger pathCount = 1;
     __block NSString *keyPath = schemeAndPath.firstObject;
     NSMutableArray *keys = [NSMutableArray array];
+    [keys addObject:keyPath];
     
     [components enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj hasPrefix:@":"]) {
@@ -205,17 +206,42 @@
         return NO;
     }
     
-    if (meta.includeVariable) {
-        
+    //先找变量表
+    DLRouterMeta *urlMeta = [self lookUpVariableRulesWithMeta:meta];
+    if (urlMeta) {
+        NSDictionary *dic = [meta parseParametersWithURL:URL mappedMeta:urlMeta];
+        return YES;
     }
     else
     {
-        //查找静态规则
         NSDictionary *dic = [meta parseParametersWithURL:URL mappedMeta:nil];
-        NSLog(@"dic = %@", dic);
         return YES;
     }
-    return NO;
+       return NO;
+}
+
+
+- (DLRouterMeta *)lookUpVariableRulesWithMeta:(DLRouterMeta *)meta
+{
+    NSDictionary *dic = self.variableRules;
+    DLRouterMeta *lookupMeta = nil;
+    for (NSString *key in meta.keys) {
+
+        
+       NSDictionary *resultDic = dic[key];
+        if (!resultDic) {
+            //找不到key的时候
+            resultDic = dic[@"DLROUTER_VARLIST"];
+        }
+        
+        dic = resultDic;
+        lookupMeta = dic[@"meta"];
+        if (lookupMeta) {
+            break;
+        }
+    }
+
+    return lookupMeta;
 }
 
 
@@ -232,26 +258,40 @@
     }
     NSString *count = @(meta.keys.count).stringValue;
     
-    
-   __block NSMutableDictionary *dic = self.variableRules[count];
-    if (!dic) {
-        dic = [NSMutableDictionary dictionary];
-        self.variableRules[count] = dic;
-    }
-    
+   __block NSMutableDictionary *dic = self.variableRules;
     
     [meta.keys enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSMutableDictionary *d =  dic[obj];
-        if (!d) {
-            d = [NSMutableDictionary dictionary];
-            dic[obj] = d;
+        NSString *key = obj;
+      
+        if ([key hasPrefix:@":"]) {
+            //变量
+             NSMutableDictionary *d = dic[@"DLROUTER_VARLIST"];
+            if (!d) {
+                d = [NSMutableDictionary dictionary];
+                dic[@"DLROUTER_VARLIST"] = d;
+            }
+            if (idx == meta.keys.count - 1) {
+                //最后一个
+                d[@"meta"] = meta;
+            }
+            dic = d;
         }
-        if (idx == meta.keys.count - 1) {
-            //最后一个
-            d[obj] = meta;
+        else
+        {
+            NSMutableDictionary *d =  dic[key];
+            if (!d) {
+                d = [NSMutableDictionary dictionary];
+                dic[key] = d;
+            }
+            if (idx == meta.keys.count - 1) {
+                //最后一个
+                d[@"meta"] = meta;
+            }
+            dic = d;
+
         }
-        dic = d;
-    }];
+
+           }];
     
     NSLog(@"VariableRules = %@", self.variableRules);
 }
