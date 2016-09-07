@@ -6,6 +6,10 @@
 	<array>
 		<dict>
 			<key>url</key>
+			<string>test/:a/b/c</string>
+		</dict>
+		<dict>
+			<key>url</key>
 			<string>test/a/b/c</string>
 		</dict>
 	</array>
