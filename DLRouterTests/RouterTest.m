@@ -42,4 +42,20 @@
     [[DLRouter sharedInstance]registerPatternFromPlist:@"rules"];
 }
 
+
+- (void)testLookUpConstantURL
+{
+    [self testReginster];
+   BOOL ok = [[DLRouter sharedInstance]openURL:@"famulei://test/a/b/c"];
+    XCTAssertTrue(ok);
+}
+
+- (void)testLookUpConstantURLAndQuery
+{
+    [self testReginster];
+    BOOL ok = [[DLRouter sharedInstance]openURL:@"famulei://test/a/b?a=1&b=2/c?c=3&d=4"];
+    XCTAssertTrue(ok);
+}
+
+
 @end
