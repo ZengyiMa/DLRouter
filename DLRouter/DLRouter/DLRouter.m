@@ -81,7 +81,17 @@
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
     if (meta) {
-        return nil;
+        
+        for (NSUInteger i = 0; i < self.keys.count; ++i) {
+            NSString *mkey = meta.keys[i];
+            if ([mkey hasPrefix:@":"]) {
+                //变量
+                parameters[mkey] = self.keys[i];
+            }
+            NSDictionary *parms = [self parseQueryParametersWithString:self.keys[i]];
+            [parameters addEntriesFromDictionary:parms];
+        }
+        
     }
     else
     {
@@ -210,6 +220,7 @@
     DLRouterMeta *urlMeta = [self lookUpVariableRulesWithMeta:meta];
     if (urlMeta) {
         NSDictionary *dic = [meta parseParametersWithURL:URL mappedMeta:urlMeta];
+        
         return YES;
     }
     else

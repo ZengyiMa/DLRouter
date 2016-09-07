@@ -46,7 +46,7 @@
 - (void)testLookUpConstantURL
 {
     [self testReginster];
-   BOOL ok = [[DLRouter sharedInstance]openURL:@"famulei://test/a/b/c"];
+   BOOL ok = [[DLRouter sharedInstance]openURL:@"famulei://test/10/b/c"];
     XCTAssertTrue(ok);
 }
 
