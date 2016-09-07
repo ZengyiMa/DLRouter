@@ -15,6 +15,7 @@
 @property (nonatomic, copy) NSString *keyPath;
 @property (nonatomic, strong) NSMutableDictionary *parmas;
 @property (nonatomic, strong) NSArray *keys;
+@property (nonatomic, assign) BOOL includeVariable;
 @end
 
 @implementation DLRouterMeta
@@ -65,6 +66,7 @@
             //变量类型
            keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", kDLRouterWildcard]];
            [keys addObject:kDLRouterWildcard];
+            _includeVariable = YES;
         }
         else
         {
@@ -81,7 +83,7 @@
 
 - (NSDictionary *)parseParametersWithURL:(NSURL *) mappedMeta:(DLRouterMeta *)meta
 {
-    
+    return  nil;
 }
 
 
@@ -93,9 +95,9 @@
 
 
 
-
-
 @interface DLRouter ()
+
+@property (nonatomic, strong) NSMutableDictionary<NSString *, DLRouterMeta *> *constantRules;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableDictionary *> *rules;
 
@@ -117,6 +119,7 @@
     self = [super init];
     if (self) {
         self.rules = [NSMutableDictionary dictionary];
+        self.constantRules = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -141,8 +144,28 @@
 
 
 - (void)registerPatternWithURL:(NSString *)URL patternParms:(NSDictionary *)parms{
-//    [self parseURL:URL];
+    
+    DLRouterMeta *meta = [[DLRouterMeta alloc]initWithURL:URL];
+    if (meta.keyPath.length == 0) {
+        //解析失败了。不注册
+        NSAssert(YES, @"URL 解析失败");
+        return;
+    }
+    
+    if (meta.includeVariable) {
+        //变量的URL集合
+        
+    }
+    else
+    {
+        //静态的URL
+        self.constantRules[meta.keyPath] = meta;
+    }
+    
+    
 }
+
+
 
 
 
