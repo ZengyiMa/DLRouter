@@ -13,7 +13,6 @@
 		85E5850F1D79517200802BF7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85E5850D1D79517200802BF7 /* Main.storyboard */; };
 		85E585111D79517200802BF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85E585101D79517200802BF7 /* Assets.xcassets */; };
 		85E585141D79517200802BF7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85E585121D79517200802BF7 /* LaunchScreen.storyboard */; };
-		85E5851F1D79517200802BF7 /* DLRouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E5851E1D79517200802BF7 /* DLRouterTests.m */; };
 		85E5852A1D79517200802BF7 /* DLRouterUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E585291D79517200802BF7 /* DLRouterUITests.m */; };
 		85E5853A1D7951A900802BF7 /* DLRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E585391D7951A900802BF7 /* DLRouter.m */; };
 		85E5853C1D79553500802BF7 /* rules.plist in Resources */ = {isa = PBXBuildFile; fileRef = 85E5853B1D79553500802BF7 /* rules.plist */; };
@@ -49,7 +48,6 @@
 		85E585131D79517200802BF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		85E585151D79517200802BF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85E5851A1D79517200802BF7 /* DLRouterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DLRouterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		85E5851E1D79517200802BF7 /* DLRouterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DLRouterTests.m; sourceTree = "<group>"; };
 		85E585201D79517200802BF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85E585251D79517200802BF7 /* DLRouterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DLRouterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		85E585291D79517200802BF7 /* DLRouterUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DLRouterUITests.m; sourceTree = "<group>"; };
@@ -133,7 +131,6 @@
 		85E5851D1D79517200802BF7 /* DLRouterTests */ = {
 			isa = PBXGroup;
 			children = (
-				85E5851E1D79517200802BF7 /* DLRouterTests.m */,
 				85E585201D79517200802BF7 /* Info.plist */,
 				85E5853D1D79824600802BF7 /* RouterTest.m */,
 			);
@@ -302,7 +299,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				85E5853E1D79824600802BF7 /* RouterTest.m in Sources */,
-				85E5851F1D79517200802BF7 /* DLRouterTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

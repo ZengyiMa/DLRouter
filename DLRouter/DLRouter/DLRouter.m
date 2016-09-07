@@ -63,16 +63,10 @@
     
     [components enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj hasPrefix:@":"]) {
-            //变量类型
-           keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", kDLRouterWildcard]];
-           [keys addObject:kDLRouterWildcard];
             _includeVariable = YES;
         }
-        else
-        {
-           keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", obj]];
-           [keys addObject:obj];
-        }
+        keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", obj]];
+        [keys addObject:obj];
         pathCount ++;
     }];
     
@@ -81,10 +75,48 @@
 }
 
 
-- (NSDictionary *)parseParametersWithURL:(NSURL *) mappedMeta:(DLRouterMeta *)meta
+- (NSDictionary *)parseParametersWithURL:(NSString *)URL mappedMeta:(DLRouterMeta *)meta
 {
-    return  nil;
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    if (meta) {
+        return nil;
+    }
+    else
+    {
+        for (NSString *key in self.keys) {
+           NSDictionary *parms = [self parseQueryParametersWithString:key];
+           [parameters addEntriesFromDictionary:parms];
+        }
+    }
+    return [parameters copy];
 }
+
+- (NSDictionary *)parseQueryParametersWithString:(NSString *)queryString
+{
+    NSArray<NSString *> *paths = [queryString componentsSeparatedByString:@"?"];
+    if (paths.count != 2) {
+        return nil;
+    }
+    
+    NSString *query = paths.lastObject;
+    NSArray *keysAndValues = [query componentsSeparatedByString:@"&"];
+    if (keysAndValues.count == 0) {
+        return nil;
+    }
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    for (NSString *keyValue in keysAndValues) {
+       NSArray *kv = [keyValue componentsSeparatedByString:@"="];
+        NSString *key = kv.firstObject;
+        NSString *value = kv.lastObject;
+        if (key && value) {
+            parameters[key] = value;
+        }
+    }
+    return [parameters copy];
+}
+
 
 
 
@@ -99,7 +131,7 @@
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, DLRouterMeta *> *constantRules;
 
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableDictionary *> *rules;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableDictionary *> *variableRules;
 
 @end
 
@@ -118,7 +150,7 @@
 {
     self = [super init];
     if (self) {
-        self.rules = [NSMutableDictionary dictionary];
+        self.variableRules = [NSMutableDictionary dictionary];
         self.constantRules = [NSMutableDictionary dictionary];
     }
     return self;
@@ -154,15 +186,62 @@
     
     if (meta.includeVariable) {
         //变量的URL集合
+        NSMutableDictionary *dic = self.variableRules;
+        for (NSUInteger i = 0; i < meta.keys.count; ++i) {
+            NSString *key = meta.keys[i];
+            NSMutableDictionary *keyDic = dic[key];
+            if (!keyDic) {
+                keyDic = [NSMutableDictionary dictionary];
+                dic[key] = keyDic;
+            }
+            
+            if (i == meta.keys.count - 1) {
+                //最后一个
+            }
+            else
+            {
+                
+            }
+            
+            
+        }
         
+        
+        for (NSString *key in meta.keys) {
+            
+            if (!dic) {
+                dic = [NSMutableDictionary dictionary];
+                self.variableRules[key] = dic;
+            }
+        }
     }
     else
     {
         //静态的URL
         self.constantRules[meta.keyPath] = meta;
     }
+}
+
+
+
+- (BOOL)openURL:(NSString *)URL
+{
+    DLRouterMeta *meta = [[DLRouterMeta alloc]initWithURL:URL];
+    if (meta.keyPath.length == 0) {
+        return NO;
+    }
     
-    
+    if (meta.includeVariable) {
+        
+    }
+    else
+    {
+        //查找静态规则
+        NSDictionary *dic = [meta parseParametersWithURL:URL mappedMeta:nil];
+        NSLog(@"dic = %@", dic);
+        return YES;
+    }
+    return NO;
 }
 
 
