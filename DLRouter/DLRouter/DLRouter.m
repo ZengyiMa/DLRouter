@@ -8,10 +8,96 @@
 
 #import "DLRouter.h"
 
+#define kDLRouterWildcard @"*"
+
+@interface DLRouterMeta : NSObject
+
+@property (nonatomic, copy) NSString *keyPath;
+@property (nonatomic, strong) NSMutableDictionary *parmas;
+@property (nonatomic, strong) NSArray *keys;
+@end
+
+@implementation DLRouterMeta
+
+- (instancetype)initWithURL:(NSString *)URL
+{
+    self = [super init];
+    if (self) {
+       [self parseURL:URL];
+    }
+    return self;
+}
+
+
+- (void)parseURL:(NSString *)URL
+{
+    if (![URL isKindOfClass:[NSString class]] && URL.length != 0) {
+        NSAssert(YES, @"URL is invalid");
+        return;
+    }
+    
+    //scheme
+    NSArray *schemeAndPath = [URL componentsSeparatedByString:@"://"];
+    if (schemeAndPath.count != 2) {
+        NSAssert(YES, @"scheme is invalid");
+        return ;
+    }
+    
+    NSString *path = schemeAndPath.lastObject;
+    if (path.length == 0) {
+        NSAssert(YES, @"path is invalid");
+        return ;
+    }
+    
+    //解析path
+    NSArray<NSString *> *components = [path componentsSeparatedByString:@"/"];
+    if (components.count == 0) {
+        return ;
+    }
+    
+    //添加协议
+    __block NSUInteger pathCount = 1;
+    __block NSString *keyPath = schemeAndPath.firstObject;
+    NSMutableArray *keys = [NSMutableArray array];
+    
+    [components enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj hasPrefix:@":"]) {
+            //变量类型
+           keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", kDLRouterWildcard]];
+           [keys addObject:kDLRouterWildcard];
+        }
+        else
+        {
+           keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", obj]];
+           [keys addObject:obj];
+        }
+        pathCount ++;
+    }];
+    
+    self.keyPath = keyPath;
+    self.keys = [keys copy];
+}
+
+
+- (NSDictionary *)parseParametersWithURL:(NSURL *) mappedMeta:(DLRouterMeta *)meta
+{
+    
+}
+
+
+
+
+
+@end
+
+
+
+
+
 
 @interface DLRouter ()
 
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSDictionary *> *rules;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableDictionary *> *rules;
 
 @end
 
@@ -43,7 +129,7 @@
         NSArray<NSDictionary *> *rules = plist[scheme];
         for (NSDictionary<NSString *, NSString *> *item in rules) {
             NSString *fullURL = [NSString stringWithFormat:@"%@://%@", scheme, item[@"url"]];
-            [self registerPattern:fullURL patternParms:item];
+            [self registerPatternWithURL:fullURL patternParms:item];
         }
     }
 }
@@ -53,9 +139,13 @@
     [self loadRulesFromPlist:plistName];
 }
 
-- (void)registerPattern:(NSString *)url patternParms:(NSDictionary *)parms{
-     NSLog(@"fullURL = %@", url);
+
+- (void)registerPatternWithURL:(NSString *)URL patternParms:(NSDictionary *)parms{
+//    [self parseURL:URL];
 }
+
+
+
 
 
 

@@ -26,6 +26,11 @@
 
 - (void)registerPatternFromPlist:(NSString *)plistName;
 
+- (BOOL)canOpenURL:(NSString *)URL;
+
+- (BOOL)openURL:(NSString *)URL;
+
+
 + (DLRouter *)sharedInstance;
 
 
