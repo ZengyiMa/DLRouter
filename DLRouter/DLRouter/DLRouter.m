@@ -99,6 +99,11 @@
     if (meta.userInfo) {
         [parameters addEntriesFromDictionary:meta.userInfo];
     }
+    
+    if (self.userInfo) {
+        [parameters addEntriesFromDictionary:self.userInfo];
+    }
+    
     if (meta.includeVariable) {
         if (self.keys.count != meta.keys.count) {
             return nil;
@@ -238,9 +243,10 @@
 
 
 
-- (BOOL)openURL:(NSString *)URL completionHandler:(void (^)())completionHandler
+- (BOOL)openURL:(NSString *)URL userInfo:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler;
 {
     DLRouterMeta *meta = [[DLRouterMeta alloc]initWithURL:URL];
+    meta.userInfo = userInfo;
     if (meta.keyPath.length == 0) {
         return NO;
     }
@@ -369,12 +375,22 @@
 
 + (BOOL)openURL:(NSString *)URL
 {
-   return [[DLRouter sharedInstance]openURL:URL completionHandler:nil];
+    return [[DLRouter sharedInstance]openURL:URL userInfo:nil completionHandler:nil];
 }
 
 + (BOOL)openURL:(NSString *)URL completionHandler:(void (^)())completionHandler
 {
-   return [[DLRouter sharedInstance]openURL:URL completionHandler:completionHandler];
+    return [[DLRouter sharedInstance]openURL:URL userInfo:nil completionHandler:completionHandler];
+}
+
++ (BOOL)openURL:(NSString *)URL userInfo:(NSDictionary *)userInfo
+{
+    return [[DLRouter sharedInstance]openURL:URL userInfo:userInfo completionHandler:nil];
+}
+
++ (BOOL)openURL:(NSString *)URL userInfo:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
+{
+    return [[DLRouter sharedInstance]openURL:URL userInfo:userInfo completionHandler:completionHandler];
 }
 
 + (void)addURLHandler:(id<DLRouterHandlerProtocol>)handler

@@ -26,14 +26,17 @@
 
 - (void)registerPatternFromPlist:(NSString *)plistName;
 - (void)registerPatternWithURL:(NSString *)URL userInfo:(NSDictionary *)userInfo completionHandler:(void(^)(NSDictionary *parameters))completionHandler;
-- (BOOL)openURL:(NSString *)URL completionHandler:(void(^)())completionHandler;
+- (BOOL)openURL:(NSString *)URL userInfo:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler;
 - (void)addURLHandler:(id<DLRouterHandlerProtocol>)handler;
 
 + (void)registerPatternWithURL:(NSString *)URL;
 + (void)registerPatternWithURL:(NSString *)URL userInfo:(NSDictionary *)userInfo completionHandler:(void(^)(NSDictionary *parameters))completionHandler;
 
 + (BOOL)openURL:(NSString *)URL;
++ (BOOL)openURL:(NSString *)URL userInfo:(NSDictionary *)userInfo;
 + (BOOL)openURL:(NSString *)URL completionHandler:(void(^)())completionHandler;
++ (BOOL)openURL:(NSString *)URL userInfo:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler;
+
 + (void)addURLHandler:(id<DLRouterHandlerProtocol>)handler;
 
 + (DLRouter *)sharedInstance;

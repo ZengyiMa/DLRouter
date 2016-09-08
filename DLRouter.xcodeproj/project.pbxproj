@@ -15,7 +15,6 @@
 		85E585141D79517200802BF7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85E585121D79517200802BF7 /* LaunchScreen.storyboard */; };
 		85E5852A1D79517200802BF7 /* DLRouterUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E585291D79517200802BF7 /* DLRouterUITests.m */; };
 		85E5853A1D7951A900802BF7 /* DLRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E585391D7951A900802BF7 /* DLRouter.m */; };
-		85E5853C1D79553500802BF7 /* rules.plist in Resources */ = {isa = PBXBuildFile; fileRef = 85E5853B1D79553500802BF7 /* rules.plist */; };
 		85E5853E1D79824600802BF7 /* RouterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E5853D1D79824600802BF7 /* RouterTest.m */; };
 /* End PBXBuildFile section */
 
@@ -54,7 +53,6 @@
 		85E5852B1D79517200802BF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85E585381D7951A900802BF7 /* DLRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLRouter.h; sourceTree = "<group>"; };
 		85E585391D7951A900802BF7 /* DLRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLRouter.m; sourceTree = "<group>"; };
-		85E5853B1D79553500802BF7 /* rules.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = rules.plist; sourceTree = "<group>"; };
 		85E5853D1D79824600802BF7 /* RouterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouterTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -151,7 +149,6 @@
 			children = (
 				85E585381D7951A900802BF7 /* DLRouter.h */,
 				85E585391D7951A900802BF7 /* DLRouter.m */,
-				85E5853B1D79553500802BF7 /* rules.plist */,
 			);
 			path = DLRouter;
 			sourceTree = "<group>";
@@ -261,7 +258,6 @@
 			files = (
 				85E585141D79517200802BF7 /* LaunchScreen.storyboard in Resources */,
 				85E585111D79517200802BF7 /* Assets.xcassets in Resources */,
-				85E5853C1D79553500802BF7 /* rules.plist in Resources */,
 				85E5850F1D79517200802BF7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
