@@ -18,6 +18,15 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    [DLRouter registerPatternWithURL:@"f://c/a/b/c"];
+    [DLRouter registerPatternWithURL:@"f://c/a/b/c/d"];
+    [DLRouter registerPatternWithURL:@"f://test/:test/" userInfo:nil completionHandler:^(NSDictionary *parameters) {
+        NSLog(@"parameters = %@", parameters);
+    }];
+    [DLRouter registerPatternWithURL:@"f://test/test/:test" userInfo:nil completionHandler:^(NSDictionary *parameters) {
+        NSLog(@"parameters = %@", parameters);
+    }];
+
 }
 
 - (void)tearDown {
@@ -25,43 +34,62 @@
     [super tearDown];
 }
 
-//- (void)testExample {
-//    // This is an example of a functional test case.
-//    // Use XCTAssert and related functions to verify your tests produce the correct results.
-//}
-//
-//- (void)testPerformanceExample {
-//    // This is an example of a performance test case.
-//    [self measureBlock:^{
-//        // Put the code you want to measure the time of here.
-//    }];
-//}
 
 - (void)testReginsterFromPlist
 {
     [[DLRouter sharedInstance]registerPatternFromPlist:@"rules"];
 }
 
-- (void)testRegisterconstant
+- (void)testRegisterConstant
 {
     [DLRouter registerPatternWithURL:@"f://a/b/c"];
+    [DLRouter registerPatternWithURL:@"f://b/a/d"];
     XCTAssertTrue([DLRouter openURL:@"f://a/b/c"]);
+    XCTAssertFalse([DLRouter openURL:@"f://a/d/c"]);
 }
 
-
-- (void)testLookUpConstantURL
+- (void)testRegisterConstantCompletion
 {
-    [self testReginster];
-   BOOL ok = [[DLRouter sharedInstance]openURL:@"famulei://test/10/b/c"];
-    XCTAssertTrue(ok);
+    [DLRouter registerPatternWithURL:@"f://a/b/c" userInfo:@{@"a":@"b"} completionHandler:^(NSDictionary *parameters) {
+        XCTAssertTrue([parameters[@"a"] isEqualToString:@"b"]);
+    }];
+    
+    [DLRouter openURL:@"f://a/b/c"];
 }
 
-- (void)testLookUpConstantURLAndQuery
+
+- (void)testRegisterConstantQuery
 {
-    [self testReginster];
-    BOOL ok = [[DLRouter sharedInstance]openURL:@"famulei://test/a/b?a=1&b=2/c?c=3&d=4"];
-    XCTAssertTrue(ok);
+    [DLRouter registerPatternWithURL:@"f://a/b/c" userInfo:@{@"a":@"b"} completionHandler:^(NSDictionary *parameters) {
+        XCTAssertTrue([parameters[@"a"] isEqualToString:@"b"]);
+        XCTAssertTrue([parameters[@"name"] isEqualToString:@"m"]);
+        XCTAssertTrue([parameters[@"lastname"] isEqualToString:@"zy"]);
+        XCTAssertTrue([parameters[@"male"] isEqualToString:@"m"]);
+        XCTAssertTrue([parameters[@"age"] isEqualToString:@"24"]);
+        NSLog(@"parameters = %@", parameters);
+    }];
+    
+    XCTAssertTrue([DLRouter openURL:@"f://a?name=m&lastname=zy/b?male=m/c?age=24"]);
 }
+
+
+- (void)testVal
+{
+    XCTAssertTrue([DLRouter openURL:@"f://test/test/abc"]);
+    XCTAssertFalse([DLRouter openURL:@"f://a/d/c"]);
+}
+
+- (void)testOpenComptetionHandle
+{
+    [DLRouter registerPatternWithURL:@"f://a/b/c"];
+    
+    [DLRouter openURL:@"f://a/b/c" completionHandler:^{
+        NSLog(@"注册成功");
+        XCTAssertTrue(YES);
+    }];
+}
+
+
 
 
 

@@ -64,16 +64,17 @@
     [keys addObject:keyPath];
     
     [components enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *mkeyPath = obj;
         if ([obj hasPrefix:@":"]) {
             _includeVariable = YES;
         }
         
         NSArray *queryArr = [obj componentsSeparatedByString:@"?"];
-        if (queryArr.count > 0) {
-            keyPath = queryArr.firstObject;
+        if (queryArr.count > 1) {
+            mkeyPath = queryArr.firstObject;
         }
         
-        keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", obj]];
+        keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", mkeyPath]];
         [keys addObject:obj];
         pathCount ++;
     }];
@@ -118,6 +119,7 @@
     }
     
     if (meta.completionHandle) {
+        [parameters addEntriesFromDictionary:meta.userInfo];
         meta.completionHandle(parameters);
     }
     
@@ -323,7 +325,7 @@
 
            }];
     
-    NSLog(@"VariableRules = %@", self.variableRules);
+//    NSLog(@"VariableRules = %@", self.variableRules);
 }
 
 + (void)registerPatternWithURL:(NSString *)URL

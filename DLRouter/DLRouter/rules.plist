@@ -2,11 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>famulei</key>
+	<key>f</key>
 	<array>
 		<dict>
 			<key>url</key>
-			<string>test/:a/b/c</string>
+			<string>c/a/b/c</string>
 		</dict>
 	</array>
 </dict>
