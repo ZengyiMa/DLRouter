@@ -20,13 +20,12 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     [DLRouter registerPatternWithURL:@"f://c/a/b/c"];
     [DLRouter registerPatternWithURL:@"f://c/a/b/c/d"];
-    [DLRouter registerPatternWithURL:@"f://test/:test/" userInfo:nil completionHandler:^(NSDictionary *parameters) {
+    [DLRouter registerPatternWithURL:@"f://test/:test" userInfo:nil completionHandler:^(NSDictionary *parameters) {
         NSLog(@"parameters = %@", parameters);
     }];
     [DLRouter registerPatternWithURL:@"f://test/test/:test" userInfo:nil completionHandler:^(NSDictionary *parameters) {
         NSLog(@"parameters = %@", parameters);
     }];
-
 }
 
 - (void)tearDown {
@@ -68,14 +67,13 @@
         XCTAssertTrue([parameters[@"age"] isEqualToString:@"24"]);
         NSLog(@"parameters = %@", parameters);
     }];
-    
     XCTAssertTrue([DLRouter openURL:@"f://a?name=m&lastname=zy/b?male=m/c?age=24"]);
 }
 
 
 - (void)testVal
 {
-    XCTAssertTrue([DLRouter openURL:@"f://test/test/abc"]);
+    XCTAssertTrue([DLRouter openURL:@"f://test?name=m/test/abc?a=b"]);
     XCTAssertFalse([DLRouter openURL:@"f://a/d/c"]);
 }
 

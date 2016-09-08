@@ -64,19 +64,24 @@
     [keys addObject:keyPath];
     
     [components enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *mkeyPath = obj;
-        if ([obj hasPrefix:@":"]) {
-            _includeVariable = YES;
+        
+        if (obj.length != 0) {
+            NSString *mkeyPath = obj;
+            if ([obj hasPrefix:@":"]) {
+                _includeVariable = YES;
+            }
+            
+            NSArray *queryArr = [obj componentsSeparatedByString:@"?"];
+            if (queryArr.count > 1) {
+                mkeyPath = queryArr.firstObject;
+            }
+            
+            keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", mkeyPath]];
+            [keys addObject:obj];
+            pathCount ++;
+
         }
         
-        NSArray *queryArr = [obj componentsSeparatedByString:@"?"];
-        if (queryArr.count > 1) {
-            mkeyPath = queryArr.firstObject;
-        }
-        
-        keyPath = [keyPath stringByAppendingString:[NSString stringWithFormat:@".%@", mkeyPath]];
-        [keys addObject:obj];
-        pathCount ++;
     }];
     
     self.keyPath = keyPath;
@@ -91,8 +96,9 @@
     }
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    
-    
+    if (meta.userInfo) {
+        [parameters addEntriesFromDictionary:meta.userInfo];
+    }
     if (meta.includeVariable) {
         if (self.keys.count != meta.keys.count) {
             return nil;
@@ -103,7 +109,13 @@
                 //变量
                 NSString *keyStr = [mkey substringFromIndex:1];
                 if (keyStr.length != 0) {
-                    parameters[keyStr] = self.keys[i];
+                    NSString *value = self.keys[i];
+                    NSArray *queryArray = [value componentsSeparatedByString:@"?"];
+                    if (queryArray.count > 1) {
+                        value = queryArray.firstObject;
+                        [parameters addEntriesFromDictionary:[self parseQueryParametersWithString:queryArray.lastObject]];
+                    }
+                    parameters[keyStr] = value;
                 }
             }
             NSDictionary *parms = [self parseQueryParametersWithString:self.keys[i]];
@@ -118,12 +130,7 @@
         }
     }
     
-    if (meta.completionHandle) {
-        [parameters addEntriesFromDictionary:meta.userInfo];
-        meta.completionHandle(parameters);
-    }
-    
-    return [parameters copy];
+    return parameters;
 }
 
 - (NSDictionary *)parseQueryParametersWithString:(NSString *)queryString
@@ -162,6 +169,7 @@
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableDictionary *> *variableRules;
 
+@property (nonatomic, strong) NSMutableArray *handlers;
 @end
 
 @implementation DLRouter
@@ -181,6 +189,7 @@
     if (self) {
         self.variableRules = [NSMutableDictionary dictionary];
         self.constantRules = [NSMutableDictionary dictionary];
+        self.handlers = [NSMutableArray array];
     }
     return self;
 }
@@ -239,24 +248,33 @@
     //先找变量表
     DLRouterMeta *urlMeta = [self lookUpVariableRulesWithMeta:meta];
     NSDictionary *parameters = nil;
+    if (!urlMeta) {
+        urlMeta = self.constantRules[meta.keyPath];
+    }
+    
     if (urlMeta) {
-       parameters = [meta parseParametersWithURL:URL mappedMeta:urlMeta];
+        parameters = [meta parseParametersWithURL:URL mappedMeta:urlMeta];
+        
+        BOOL hadHandle = NO;
+        if (self.handlers.count != 0) {
+            for (id<DLRouterHandlerProtocol> handler in self.handlers) {
+               hadHandle = [handler handleURL:URL userInfo:parameters];
+                if (hadHandle) {
+                    break;
+                }
+            }
+        }
+        
+        if (hadHandle == NO) {
+            if (urlMeta.completionHandle) {
+                urlMeta.completionHandle(parameters);
+            }
+        }
+        
         if (completionHandler) {
             completionHandler();
         }
         return YES;
-    }
-    else
-    {
-        //变量找不着，找不可变的规则
-        if (self.constantRules[meta.keyPath]) {
-            //找到了
-            parameters = [meta parseParametersWithURL:URL mappedMeta:self.constantRules[meta.keyPath]];
-            if (completionHandler) {
-                completionHandler();
-            }
-            return YES;
-        }
     }
     return NO;
 }
@@ -266,7 +284,7 @@
 {
     NSDictionary *dic = self.variableRules;
     DLRouterMeta *lookupMeta = nil;
-    for (NSString *key in meta.keys) {
+    for (NSString *key in [meta.keyPath componentsSeparatedByString:@"."]) {
 
         
        NSDictionary *resultDic = dic[key];
@@ -328,6 +346,12 @@
 //    NSLog(@"VariableRules = %@", self.variableRules);
 }
 
+
+- (void)addURLHandler:(id<DLRouterHandlerProtocol>)handler
+{
+    [self.handlers addObject:handler];
+}
+
 + (void)registerPatternWithURL:(NSString *)URL
 {
     [[DLRouter sharedInstance]registerPatternWithURL:URL userInfo:nil completionHandler:nil];
@@ -351,6 +375,11 @@
 + (BOOL)openURL:(NSString *)URL completionHandler:(void (^)())completionHandler
 {
    return [[DLRouter sharedInstance]openURL:URL completionHandler:completionHandler];
+}
+
++ (void)addURLHandler:(id<DLRouterHandlerProtocol>)handler
+{
+    [[DLRouter sharedInstance]addURLHandler:handler];
 }
 
 
