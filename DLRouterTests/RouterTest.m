@@ -37,9 +37,15 @@
 //    }];
 //}
 
-- (void)testReginster
+- (void)testReginsterFromPlist
 {
     [[DLRouter sharedInstance]registerPatternFromPlist:@"rules"];
+}
+
+- (void)testRegisterconstant
+{
+    [DLRouter registerPatternWithURL:@"f://a/b/c"];
+    XCTAssertTrue([DLRouter openURL:@"f://a/b/c"]);
 }
 
 
