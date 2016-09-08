@@ -9,16 +9,6 @@
 #import <Foundation/Foundation.h>
 
 
-//遵守 RFC标准的URL eg:http://domain/path
-
-/* 存储结构
- @{@"scheme":
-    @{@"domain":
-        @{@"path":
-            @{}}
-     }
- };
- */
 
 
 
@@ -26,10 +16,17 @@
 
 - (void)registerPatternFromPlist:(NSString *)plistName;
 
-- (BOOL)canOpenURL:(NSString *)URL;
+- (void)registerPatternWithURL:(NSString *)URL userInfo:(NSDictionary *)userInfo completionHandler:(void(^)(NSDictionary *parameters))completionHandler;
 
-- (BOOL)openURL:(NSString *)URL;
+- (BOOL)openURL:(NSString *)URL completionHandler:(void(^)())completionHandler;
 
+
++ (void)registerPatternWithURL:(NSString *)URL;
++ (void)registerPatternWithURL:(NSString *)URL userInfo:(NSDictionary *)userInfo;
++ (void)registerPatternWithURL:(NSString *)URL userInfo:(NSDictionary *)userInfo completionHandler:(void(^)(NSDictionary *parameters))completionHandler;
+
++ (BOOL)openURL:(NSString *)URL;
++ (BOOL)openURL:(NSString *)URL completionHandler:(void(^)())completionHandler;
 
 + (DLRouter *)sharedInstance;
 
